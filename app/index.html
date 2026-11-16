@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontpage — a fast make.fun frontend</title>
+<meta name="description" content="A lightweight, read-only frontend for make.fun: live bounty board, bounty pages, leaderboards and public profiles.">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header id="topbar">
+  <a id="brand" href="#/">
+    <span id="brand-mark" aria-hidden="true">◆</span>
+    <span id="brand-name">Frontpage</span>
+    <span id="brand-sub">for make.fun</span>
+  </a>
+  <nav id="topnav" aria-label="Main">
+    <a href="#/" data-nav="board">Bounties</a>
+    <a href="#/bounty/makefun-frontend-01" data-nav="bounty">This bounty</a>
+    <a href="#/bounty/makefun-frontend-01/leaderboard" data-nav="leaderboard">Leaderboard</a>
+  </nav>
+  <form id="jump" role="search">
+    <label class="visually-hidden" for="jump-input">Go to a profile</label>
+    <input id="jump-input" type="search" placeholder="@handle → profile" autocomplete="off" spellcheck="false">
+    <button id="jump-go" type="submit">Go</button>
+  </form>
+</header>
+
+<main id="view" tabindex="-1">
+  <p id="boot-note">Loading the board…</p>
+</main>
+
+<footer id="colophon">
+  <p>Frontpage is a read-only client. Every number on it comes live from the
+  public make.fun API; nothing is signed, posted or tracked. Deadlines decide
+  whether a bounty still takes entries — a bounty past its deadline is shown
+  as closed even while the API still calls it open.</p>
+</footer>
+
+<script type="module" src="/main.js"></script>
+</body>
+</html>
