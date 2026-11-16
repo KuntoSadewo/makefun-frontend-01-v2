@@ -6,7 +6,15 @@
 // network; both runs must produce byte-identical output, so the copy walks
 // each tree in sorted order and nothing time- or random-shaped is written.
 
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -35,9 +43,23 @@ function copyTree(name: string): void {
   cpSync(from, to, { recursive: true });
 }
 
+// The gate refuses an app/ holding a symbolic link or any other special
+// file, so fail here — loudly, at hand-in time — rather than at the scorer.
+function refuseSpecialFiles(dir: string): void {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isSymbolicLink() || (!entry.isDirectory() && !entry.isFile())) {
+      throw new Error(`special file in the entry: ${path}`);
+    }
+    if (entry.isDirectory()) refuseSpecialFiles(path);
+    else if (!lstatSync(path).isFile()) throw new Error(`special file: ${path}`);
+  }
+}
+
 mkdirSync(outputDir, { recursive: true });
 copyTree('app');
 copyTree('screenshots');
+refuseSpecialFiles(join(outputDir, 'app'));
 
 const dossier = buildDossier(outputDir, DOSSIER_CAPS);
 writeFileSync(join(outputDir, 'dossier.json'), dossier);

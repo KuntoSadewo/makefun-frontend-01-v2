@@ -393,7 +393,7 @@ export async function profileView(mount, handle) {
   const solutions = profile.solutions ?? [];
   mount.innerHTML = `
     <section class="page-head profile-head">
-      ${avatarImg(profile.image ?? profile.avatar, profile.handle, 'avatar-lg')}
+      ${avatarImg(`/api/profiles/${encodeURIComponent(profile.handle)}/picture.png`, profile.handle, 'avatar-lg')}
       <div>
         <h1>${escapeHtml(name)}</h1>
         <p class="muted">@${escapeHtml(profile.handle)} · joined ${dayOnly(profile.joined_at)}</p>
